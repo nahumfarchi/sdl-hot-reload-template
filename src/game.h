@@ -1,7 +1,22 @@
 #include "SDL.h"
 
-struct GameMemory {
+struct Entity {
+    float x;
+    float y;
+    float width;
+    float height;
+};
 
+struct GameInput {
+    bool moveUp;
+    bool moveDown;
+    bool moveLeft;
+    bool moveRight;
+};
+
+struct GameMemory {
+    GameInput lastInput;
+    Entity player;
 };
 
 class Game {
@@ -18,7 +33,11 @@ class Game {
 
     private:
 
+    SDL_Window *window;
+    SDL_Renderer *renderer;
     bool _isRunning = true;
 
-    void handleEvent(SDL_Event event);
+    void processEvent(SDL_Event event, GameInput *input);
+    void processKeyDown(SDL_KeyboardEvent event, GameInput *input);
+    void processKeyUp(SDL_KeyboardEvent event, GameInput *input);
 };
