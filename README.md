@@ -1,6 +1,6 @@
 # SDL Hot-Reload Template
 
-An SDL hot-reload template for game development.
+An SDL hot-reload template for game development in C++.
 
 ## Setup
 
