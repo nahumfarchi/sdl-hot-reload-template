@@ -4,43 +4,68 @@
 const int INITIAL_WIDTH = 640;
 const int INITIAL_HEIGHT = 480;
 
-void Game::initWindow() {
+SDL_Window *g_window;
+SDL_Renderer *g_renderer;
+GameMemory *g_memory;
+
+EXTERN_C
+INIT_WINDOW_API(initWindow) {
     if (!SDL_Init(SDL_INIT_VIDEO)) {
         // TODO: handle error
     }
 
-    this->window = SDL_CreateWindow("SDL hot-reload template", INITIAL_WIDTH, INITIAL_HEIGHT, SDL_WINDOW_RESIZABLE);
-    if (!this->window) {
+    g_window = SDL_CreateWindow("SDL hot-reload template", INITIAL_WIDTH, INITIAL_HEIGHT, SDL_WINDOW_RESIZABLE);
+    if (!g_window) {
         // TODO: handle error
     }
 
-    this->renderer = SDL_CreateRenderer(this->window, nullptr);
-    if (!this->renderer) {
+    g_renderer = SDL_CreateRenderer(g_window, nullptr);
+    if (!g_renderer) {
         // TODO: handle error
     }
 }
 
-void Game::initGame() {
-    this->memory = new GameMemory;
-    Entity *player = &this->memory->player;
+EXTERN_C
+INIT_GAME_API(initGame) {
+    g_memory = new GameMemory;
+    *g_memory = {};
+
+    g_memory->window = g_window;
+    g_memory->renderer = g_renderer;
+
+    GameInput *input = &g_memory->lastInput;
+    *input = {};
+
+    Entity *player = &g_memory->player;
     player->x = 100;
     player->y = 100;
     player->width = 25;
     player->height = 50;
+
+    g_memory->isRunning = true;
 }
 
-bool Game::isRunning() {
-    return this->_isRunning;
+EXTERN_C
+HOT_RELOAD_API(hotReloadGame) {
+    g_memory = memory;
+    g_window = memory->window;
+    g_renderer = memory->renderer;
 }
 
-void Game::update() {
+EXTERN_C
+IS_GAME_RUNNING_API(isGameRunning) {
+    return g_memory->isRunning;
+}
+
+EXTERN_C
+UPDATE_GAME_API(updateGame) {
     SDL_Event event;
-    GameInput *input = &this->memory->lastInput;
+    GameInput *input = &g_memory->lastInput;
     while (SDL_PollEvent(&event)) {
-        this->processEvent(event, input);
+        processEvent(event, input);
     }
 
-    Entity *player = &this->memory->player;
+    Entity *player = &g_memory->player;
     float speed = 0.1f;
     if (input->moveUp) {
         player->y -= speed;
@@ -56,22 +81,30 @@ void Game::update() {
     }
 
     SDL_FRect playerRect = { player->x, player->y, player->width, player->height };
-    SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255);
-    SDL_RenderClear(this->renderer);
-    SDL_SetRenderDrawColor(this->renderer, 255, 0, 255, 255);
-    SDL_RenderRect(this->renderer, &playerRect);
-    SDL_RenderPresent(this->renderer);
+    SDL_SetRenderDrawColor(g_renderer, 0, 0, 0, 255);
+    SDL_RenderClear(g_renderer);
+    SDL_SetRenderDrawColor(g_renderer, 0, 255, 0, 255);
+    //SDL_SetRenderDrawColor(g_renderer, 255, 0, 255, 255);
+    SDL_RenderRect(g_renderer, &playerRect);
+    SDL_RenderPresent(g_renderer);
 }
 
-void Game::closeGame() {
-    delete this->memory;
+EXTERN_C
+RELEASE_GAME_API(releaseGame) {
+    delete g_memory;
 }
 
-void Game::closeWindow() {
-    SDL_DestroyWindow(this->window);
+EXTERN_C
+CLOSE_WINDOW_API(closeWindow) {
+    SDL_DestroyWindow(g_window);
 }
 
-void Game::processEvent(SDL_Event event, GameInput *input) {
+EXTERN_C
+GET_GAME_MEMORY_API(getGameMemory) {
+    return g_memory;
+}
+
+void processEvent(SDL_Event event, GameInput *input) {
     SDL_Window *_window = SDL_GetWindowFromEvent(&event);
     SDL_Renderer *_renderer = SDL_GetRenderer(_window);
 
@@ -81,7 +114,7 @@ void Game::processEvent(SDL_Event event, GameInput *input) {
     switch (event.type) {
 
         case SDL_EVENT_QUIT: {
-            this->_isRunning = false;
+            g_memory->isRunning = false;
             break;
         }
 
@@ -96,18 +129,18 @@ void Game::processEvent(SDL_Event event, GameInput *input) {
         }
 
         case SDL_EVENT_KEY_DOWN: {
-            this->processKeyDown(event.key, input);
+            processKeyDown(event.key, input);
             break;
         }
 
         case SDL_EVENT_KEY_UP: {
-            this->processKeyUp(event.key, input);
+            processKeyUp(event.key, input);
             break;
         }
     }
 }
 
-void Game::processKeyDown(SDL_KeyboardEvent event, GameInput *input) {
+void processKeyDown(SDL_KeyboardEvent event, GameInput *input) {
     if (event.repeat == 0) {
         if (event.scancode == SDL_SCANCODE_UP) {
             input->moveUp = true;
@@ -127,7 +160,7 @@ void Game::processKeyDown(SDL_KeyboardEvent event, GameInput *input) {
     }
 }
 
-void Game::processKeyUp(SDL_KeyboardEvent event, GameInput *input) {
+void processKeyUp(SDL_KeyboardEvent event, GameInput *input) {
     if (event.repeat == 0) {
         if (event.scancode == SDL_SCANCODE_UP) {
             input->moveUp = false;

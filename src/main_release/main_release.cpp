@@ -4,15 +4,14 @@
 #include "../game.cpp"
 
 int CALLBACK WinMain(HINSTANCE instance, HINSTANCE previousInstance, LPSTR commandLine, int showCode) {
-    Game game;
-    game.initWindow();
-    game.initGame();
-    while (game.isRunning()) {
-        game.update();
+    initWindow();
+    initGame();
+    while (isGameRunning()) {
+        updateGame();
     }
 
-    game.closeGame();
-    game.closeWindow();
+    releaseGame();
+    closeWindow();
 
     return 0;
 }
