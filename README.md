@@ -1,5 +1,7 @@
 # SDL Hot-Reload Template
 
+An SDL hot-reload template for game development in C++.
+
 ## Setup
 
 1. Install MSVC build tools (in https://visualstudio.microsoft.com/downloads/ under "Tools for Visual Studio")
@@ -14,3 +16,7 @@
 ## Debug with Visual Studio
 
 Simply run `debug.bat`. This will create and open a VS solution from which you can debug. Hot-reloading works here as well.
+
+---
+
+Inspired by https://hero.handmade.network/episode/code/day021/ and https://github.com/karl-zylinski/odin-raylib-hot-reload-game-template
