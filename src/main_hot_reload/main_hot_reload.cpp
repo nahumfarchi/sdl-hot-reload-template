@@ -8,11 +8,21 @@
 
 char* GAME_DLL = "game.dll";
 
+#if DEBUG
+#define assert(expression) \
+  if (!(expression)) {     \
+    *(int*)0 = 0;          \
+  }
+#else
+#define assert(expression)
+#endif
+
 struct GameAPI {
     std::string name;
     int version;
     bool isValid;
     FILETIME lastWriteTime;
+    SDL_SharedObject *dll;
 
     init_window_callback *initWindow;
     init_game_callback *initGame;
@@ -53,7 +63,7 @@ GameAPI loadGameAPI(int version) {
         return api;
     }
 
-    SDL_SharedObject *gameDLL = SDL_LoadObject(dllDst.c_str());
+    SDL_SharedObject *gameDLL = api.dll = SDL_LoadObject(dllDst.c_str());
     if (!gameDLL) {
         return api;
     }
@@ -102,6 +112,15 @@ GameAPI loadGameAPI(int version) {
     return api;
 }
 
+void unloadGameAPI(GameAPI *api) {
+    if (api->dll) {
+        SDL_UnloadObject(api->dll);
+        api->dll = nullptr;
+    }
+    
+    api->isValid = false;
+}
+
 int CALLBACK WinMain(HINSTANCE instance, HINSTANCE previousInstance, LPSTR commandLine, int showCode) {
     printf("Loading game API...\n");
     GameAPI api = loadGameAPI(0);
@@ -115,6 +134,8 @@ int CALLBACK WinMain(HINSTANCE instance, HINSTANCE previousInstance, LPSTR comma
     api.initGame();
     GameInput input = {};
     while (api.isGameRunning()) {
+        assert(api.isValid)
+
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
             processEvent(event, &input);
@@ -130,6 +151,7 @@ int CALLBACK WinMain(HINSTANCE instance, HINSTANCE previousInstance, LPSTR comma
             if (newAPI.isValid) {
                 GameMemory *memory = api.getGameMemory();
                 newAPI.hotReloadGame(memory);
+                unloadGameAPI(&api);
                 api = newAPI;
             } else {
                 // TODO: handle failure

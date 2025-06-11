@@ -44,8 +44,7 @@ set debug=                         -FC                       &:: Show absolute p
 set debug=%debug%                  -Z7                       &:: Produce debug information
 
 :: Cross platform defines
-set defines=                       -DHANDMADE_INTERNAL=1
-set defines=%defines%              -DHANDMADE_SLOW=1
+set defines=                       -DDEBUG_BUILD=1
 
 :: Common linker switches
 set common_link=                   -opt:ref                  &:: Remove unused functions
