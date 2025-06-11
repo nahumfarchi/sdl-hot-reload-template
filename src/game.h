@@ -13,8 +13,6 @@ struct Entity {
 struct GameMemory {
     bool isRunning;
     Entity player;
-
-    int arr[1000];
 };
 
 #ifdef __cplusplus

@@ -2,8 +2,8 @@
 
 echo Starting hot-reload build...
 
-call build_common_definitions
-call build_hot_reload_definitions
+call scripts\build_common_definitions
+call scripts\build_hot_reload_definitions
 
 set OUT_DIR=build\hot_reload
 if not exist %OUT_DIR% mkdir %OUT_DIR%

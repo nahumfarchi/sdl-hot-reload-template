@@ -1,3 +1,7 @@
+:: Init shell if cl is not in the path
+echo Checking if cl compiler exists...
+WHERE cl
+IF %ERRORLEVEL% NEQ 0 call shell
 
 :: Compile target path
 set code_path=..\..\src

@@ -9,14 +9,16 @@
       "windows": {
         "command": "scripts/timecmd ${workspaceFolder}/scripts/debug_build.bat"
       },
-      //   "linux": {
-      //     "command": "${workspaceFolder}/scripts/debug_build.sh"
-      //   },
-      //   "osx": {
-      //     "command": "${workspaceFolder}/scripts/debug_build.sh"
-      //   },
-      "group": "build"
-    }
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": false
+      }
+    },
     // {
     //   "label": "Build Release",
     //   "type": "shell",
@@ -45,30 +47,37 @@
     //   },
     //   "group": "build"
     // },
-    // {
-    //   "label": "Build Hot Reload",
-    //   "type": "shell",
-    //   "windows": {
-    //     "command": "scripts/timecmd ${workspaceFolder}/build_hot_reload.bat"
-    //   },
-    //   "linux": {
-    //     "command": "${workspaceFolder}/build_hot_reload.sh"
-    //   },
-    //   "osx": {
-    //     "command": "${workspaceFolder}/build_hot_reload.sh"
-    //   },
-    //   "presentation": {
-    //     "echo": true,
-    //     "reveal": "always",
-    //     "focus": false,
-    //     "panel": "shared",
-    //     "showReuseMessage": false,
-    //     "clear": true
-    //   },
-    //   "group": {
-    //     "kind": "build",
-    //     "isDefault": true
-    //   }
-    // }
+    {
+      "label": "Build Hot-Reload",
+      "type": "shell",
+      "windows": {
+        "command": "scripts/timecmd ${workspaceFolder}/scripts/hot_reload_build"
+      },
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": false
+      }
+    },
+    {
+      "label": "Hot-Reload",
+      "type": "shell",
+      "windows": {
+        "command": "scripts/timecmd ${workspaceFolder}/scripts/hot_reload"
+      },
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": false
+      }
+    }
   ]
 }

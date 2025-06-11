@@ -2,7 +2,7 @@
 
 echo Starting debug build...
 
-call build_common_definitions
+call scripts\build_common_definitions
 
 set OUT_DIR=build\debug
 if not exist %OUT_DIR% mkdir %OUT_DIR%

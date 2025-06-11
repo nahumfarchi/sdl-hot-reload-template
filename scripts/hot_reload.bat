@@ -2,7 +2,8 @@
 
 echo Starting hot-reload...
 
-call build_common_definitions
+call scripts\build_common_definitions
+call scripts\build_hot_reload_definitions
 
 set OUT_DIR=build\hot_reload
 if not exist %OUT_DIR% mkdir %OUT_DIR%
@@ -21,19 +22,6 @@ pushd %OUT_DIR%
 :: Compile target path
 set entry_point=%code_path%\main_hot_reload\main_hot_reload.cpp
 set dll_entry_point=%code_path%\game.cpp
-
-:: DLL linker switches
-set dll_link=                      /EXPORT:initGame          &:: Export the function into the dll's table of functions
-set dll_link=%dll_link%            /EXPORT:hotReloadGame
-set dll_link=%dll_link%            /EXPORT:isGameRunning
-set dll_link=%dll_link%            /EXPORT:updateGame
-set dll_link=%dll_link%            /EXPORT:releaseGame
-set dll_link=%dll_link%            /EXPORT:getGameMemory
-set dll_link=%dll_link%            /EXPORT:getGameMemorySize
-
-:: Game DLL required libraries
-set game_dll_libs=                 shell32.lib
-set game_dll_libs=%game_dll_libs%  SDL3.lib
 
 :: Build the game dll
 del *.pdb > NUL 2> NUL
