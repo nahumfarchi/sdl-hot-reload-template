@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL.h>
+#include "input.h"
 
 struct Entity {
     float x;
@@ -9,19 +10,11 @@ struct Entity {
     float height;
 };
 
-struct GameInput {
-    bool moveUp;
-    bool moveDown;
-    bool moveLeft;
-    bool moveRight;
-};
-
 struct GameMemory {
     SDL_Window *window;
     SDL_Renderer *renderer;
 
     bool isRunning;
-    GameInput lastInput;
     Entity player;
 };
 
@@ -46,7 +39,7 @@ typedef HOT_RELOAD_API(hot_reload_game_callback);
 #define IS_GAME_RUNNING_API(name) bool name()
 typedef IS_GAME_RUNNING_API(is_game_running_callback);
 
-#define UPDATE_GAME_API(name) void name()
+#define UPDATE_GAME_API(name) void name(GameInput input)
 typedef UPDATE_GAME_API(update_game_callback);
 
 #define RELEASE_GAME_API(name) void name()

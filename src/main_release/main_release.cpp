@@ -6,8 +6,14 @@
 int CALLBACK WinMain(HINSTANCE instance, HINSTANCE previousInstance, LPSTR commandLine, int showCode) {
     initWindow();
     initGame();
+    GameInput input = {};
     while (isGameRunning()) {
-        updateGame();
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            processEvent(event, &input);
+        }
+
+        updateGame(input);
     }
 
     releaseGame();

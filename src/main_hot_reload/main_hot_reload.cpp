@@ -113,8 +113,14 @@ int CALLBACK WinMain(HINSTANCE instance, HINSTANCE previousInstance, LPSTR comma
 
     api.initWindow();
     api.initGame();
+    GameInput input = {};
     while (api.isGameRunning()) {
-        api.updateGame();
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            processEvent(event, &input);
+        }
+
+        api.updateGame(input);
 
         FILETIME lastWriteTime = win32GetLastWriteTime(GAME_DLL);
         bool reload = CompareFileTime(&lastWriteTime, &api.lastWriteTime);

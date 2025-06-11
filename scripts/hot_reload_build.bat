@@ -20,7 +20,7 @@ pushd %OUT_DIR%
 
 :: Compile target path
 set code_path=..\..\src
-set entry_point=%code_path%\main_hot_reload\main_hot_reload.cpp
+set cpp_files=%code_path%\main_hot_reload\main_hot_reload.cpp %code_path%\input.cpp
 set dll_entry_point=%code_path%\game.cpp
 set sdl_path=C:\git\learning\games\sdl-hotreload-template\ext\sdl\VisualC\x64\Debug
 set sdl_include=/IC:\git\learning\games\sdl-hotreload-template\ext\sdl\include /IC:\git\learning\games\sdl-hotreload-template\ext\sdl\include\SDL3
@@ -87,7 +87,7 @@ del *.pdb > NUL 2> NUL
 cl %sdl_include% %optimization% %flags% %defines% %debug% -Fmgame.map %dll_entry_point% %game_dll_libs% -LD /link /LIBPATH:%sdl_path% /pdb:game%random%.pdb %common_link% %dll_link%
 :: Build the platform layer
 :: TODO: -Fmwin32_handmade.map?
-cl %sdl_include% %optimization% %flags% %defines% %debug% -Fmmain_hot_reload.map %entry_point% %win32_libs% /link /LIBPATH:%sdl_path% %common_link% %win32_link%
+cl %sdl_include% %optimization% %flags% %defines% %debug% -Fmmain_hot_reload.map %cpp_files% %win32_libs% /link /LIBPATH:%sdl_path% %common_link% %win32_link%
 
 echo Hot-reload build created in %OUT_DIR%
 

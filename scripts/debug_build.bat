@@ -20,7 +20,7 @@ pushd %OUT_DIR%
 
 :: Compile target path
 set code_path=..\..\src
-set entry_point=%code_path%\main_release\main_release.cpp
+set cpp_files=%code_path%\main_release\main_release.cpp %code_path%\input.cpp
 set sdl_path=C:\git\learning\games\sdl-hotreload-template\ext\sdl\VisualC\x64\Debug
 set sdl_include=/IC:\git\learning\games\sdl-hotreload-template\ext\sdl\include /IC:\git\learning\games\sdl-hotreload-template\ext\sdl\include\SDL3
 
@@ -76,7 +76,7 @@ del *.pdb > NUL 2> NUL
 ::cl %optimization% %flags% %defines% %debug% -Fmhandmade.map %code_path%handmade.cpp -LD /link /pdb:handmade%random%.pdb %common_link% %dll_link%
 :: Build the platform layer
 :: TODO: -Fmwin32_handmade.map?
-cl %sdl_include% %optimization% %flags% %defines% %debug% %entry_point% %win32_libs% /link /LIBPATH:%sdl_path% %common_link% %win32_link%
+cl %sdl_include% %optimization% %flags% %defines% %debug% %cpp_files% %win32_libs% /link /LIBPATH:%sdl_path% %common_link% %win32_link%
 
 echo Debug build created in %OUT_DIR%
 
