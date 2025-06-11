@@ -55,14 +55,13 @@ set common_link=%link%             -incremental:no           &:: Make sure we do
 set win32_link=                    -subsystem:windows,5.2    &:: subsystem, 5.1 for x86 (esnure that we can run in Windows XP)
 
 :: DLL linker switches
-set dll_link=                      /EXPORT:initWindow    &:: Export the function into the dll's table of functions
-set dll_link=%dll_link%            /EXPORT:initGame
+set dll_link=                      /EXPORT:initGame          &:: Export the function into the dll's table of functions
 set dll_link=%dll_link%            /EXPORT:hotReloadGame
 set dll_link=%dll_link%            /EXPORT:isGameRunning
 set dll_link=%dll_link%            /EXPORT:updateGame
 set dll_link=%dll_link%            /EXPORT:releaseGame
-set dll_link=%dll_link%            /EXPORT:closeWindow
 set dll_link=%dll_link%            /EXPORT:getGameMemory
+set dll_link=%dll_link%            /EXPORT:getGameMemorySize
 
 :: WIN32 platform required libraries
 set win32_libs=                    user32.lib

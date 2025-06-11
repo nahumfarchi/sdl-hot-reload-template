@@ -4,6 +4,10 @@
 
 struct GameInput {
     bool quit;
+    // Force reload the game dll
+    bool forceReload;
+    // Force reload the game dll and reset it's state
+    bool forceRestart;
 
     bool moveUp;
     bool moveDown;

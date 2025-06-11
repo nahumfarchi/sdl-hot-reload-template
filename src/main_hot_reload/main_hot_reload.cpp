@@ -17,6 +17,9 @@ char* GAME_DLL = "game.dll";
 #define assert(expression)
 #endif
 
+const int INITIAL_WIDTH = 640;
+const int INITIAL_HEIGHT = 480;
+
 struct GameAPI {
     std::string name;
     int version;
@@ -24,14 +27,13 @@ struct GameAPI {
     FILETIME lastWriteTime;
     SDL_SharedObject *dll;
 
-    init_window_callback *initWindow;
     init_game_callback *initGame;
     is_game_running_callback *isGameRunning;
     update_game_callback *updateGame;
     release_game_callback *releaseGame;
-    close_window_callback *closeWindow;
     hot_reload_game_callback *hotReloadGame;
     get_game_memory_callback *getGameMemory;
+    get_game_memory_size_callback *getGameMemorySize;
 };
 
 inline FILETIME win32GetLastWriteTime(char* filename) {
@@ -68,11 +70,6 @@ GameAPI loadGameAPI(int version) {
         return api;
     }
 
-    api.initWindow = (init_window_callback*)SDL_LoadFunction(gameDLL, "initWindow");
-    if (!api.initWindow) {
-        return api;
-    }
-
     api.initGame = (init_game_callback*)SDL_LoadFunction(gameDLL, "initGame");
     if (!api.initGame) {
         return api;
@@ -93,11 +90,6 @@ GameAPI loadGameAPI(int version) {
         return api;
     }
 
-    api.closeWindow = (close_window_callback*)SDL_LoadFunction(gameDLL, "closeWindow");
-    if (!api.closeWindow) {
-        return api;
-    }
-
     api.hotReloadGame = (hot_reload_game_callback*)SDL_LoadFunction(gameDLL, "hotReloadGame");
     if (!api.hotReloadGame) {
         return api;
@@ -105,6 +97,11 @@ GameAPI loadGameAPI(int version) {
 
     api.getGameMemory = (get_game_memory_callback*)SDL_LoadFunction(gameDLL, "getGameMemory");
     if (!api.getGameMemory) {
+        return api;
+    }
+
+    api.getGameMemorySize = (get_game_memory_size_callback*)SDL_LoadFunction(gameDLL, "getGameMemorySize");
+    if (!api.getGameMemorySize) {
         return api;
     }
 
@@ -122,6 +119,23 @@ void unloadGameAPI(GameAPI *api) {
 }
 
 int CALLBACK WinMain(HINSTANCE instance, HINSTANCE previousInstance, LPSTR commandLine, int showCode) {
+    if (!SDL_Init(SDL_INIT_VIDEO)) {
+        // TODO: handle error
+        exit(1);
+    }
+
+    SDL_Window *window = SDL_CreateWindow("SDL hot-reload template", INITIAL_WIDTH, INITIAL_HEIGHT, SDL_WINDOW_RESIZABLE);
+    if (!window) {
+        // TODO: handle error
+        exit(1);
+    }
+
+    SDL_Renderer *renderer = SDL_CreateRenderer(window, nullptr);
+    if (!renderer) {
+        // TODO: handle error
+        exit(1);
+    }
+    
     printf("Loading game API...\n");
     GameAPI api = loadGameAPI(0);
     if (!api.isValid) {
@@ -130,7 +144,6 @@ int CALLBACK WinMain(HINSTANCE instance, HINSTANCE previousInstance, LPSTR comma
         return 1;
     }
 
-    api.initWindow();
     api.initGame();
     GameInput input = {};
     while (api.isGameRunning()) {
@@ -141,27 +154,40 @@ int CALLBACK WinMain(HINSTANCE instance, HINSTANCE previousInstance, LPSTR comma
             processEvent(event, &input);
         }
 
-        api.updateGame(input);
+        api.updateGame(renderer, input);
 
         FILETIME lastWriteTime = win32GetLastWriteTime(GAME_DLL);
-        bool reload = CompareFileTime(&lastWriteTime, &api.lastWriteTime);
+        bool reload = CompareFileTime(&lastWriteTime, &api.lastWriteTime) || input.forceReload || input.forceRestart;
         if (reload) {
             printf("Hot-reloading version %d\n", api.version + 1);
             GameAPI newAPI = loadGameAPI(api.version+1);
             if (newAPI.isValid) {
-                GameMemory *memory = api.getGameMemory();
-                newAPI.hotReloadGame(memory);
+                bool memorySizeChanged = api.getGameMemorySize() != newAPI.getGameMemorySize();
+                bool forceRestart = input.forceRestart || memorySizeChanged;
+                if (forceRestart) {
+                    // Re-initialize the game and all of it's internal state
+                    api.releaseGame();
+                    newAPI.initGame();
+                } else {
+                    // Hot-reload using the current game memory
+                    GameMemory *memory = api.getGameMemory();
+                    newAPI.hotReloadGame(memory);
+                }
+
                 unloadGameAPI(&api);
                 api = newAPI;
             } else {
                 // TODO: handle failure
                 printf("Failed to hot-reload!\n");
             }
+
+            // Reset the input just to be safe (so that we don't get stuck in an infinite reload loop)
+            input = {};
         }
     }
 
     api.releaseGame();
-    api.closeWindow();
+    SDL_DestroyWindow(window);
 
     return 0;
 }

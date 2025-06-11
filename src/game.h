@@ -11,11 +11,10 @@ struct Entity {
 };
 
 struct GameMemory {
-    SDL_Window *window;
-    SDL_Renderer *renderer;
-
     bool isRunning;
     Entity player;
+
+    int arr[1000];
 };
 
 #ifdef __cplusplus
@@ -27,9 +26,6 @@ struct GameMemory {
 
 // "Services" that the game provides to the platform layer
 
-#define INIT_WINDOW_API(name) void name()
-typedef INIT_WINDOW_API(init_window_callback);
-
 #define INIT_GAME_API(name) void name()
 typedef INIT_GAME_API(init_game_callback);
 
@@ -39,17 +35,17 @@ typedef HOT_RELOAD_API(hot_reload_game_callback);
 #define IS_GAME_RUNNING_API(name) bool name()
 typedef IS_GAME_RUNNING_API(is_game_running_callback);
 
-#define UPDATE_GAME_API(name) void name(GameInput input)
+#define UPDATE_GAME_API(name) void name(SDL_Renderer *renderer, GameInput input)
 typedef UPDATE_GAME_API(update_game_callback);
 
 #define RELEASE_GAME_API(name) void name()
 typedef RELEASE_GAME_API(release_game_callback);
 
-#define CLOSE_WINDOW_API(name) void name()
-typedef CLOSE_WINDOW_API(close_window_callback);
-
 #define GET_GAME_MEMORY_API(name) GameMemory* name()
 typedef GET_GAME_MEMORY_API(get_game_memory_callback);
+
+#define GET_GAME_MEMORY_SIZE_API(name) int name()
+typedef GET_GAME_MEMORY_SIZE_API(get_game_memory_size_callback);
 
 void processEvent(SDL_Event event, GameInput *input);
 void processKeyDown(SDL_KeyboardEvent event, GameInput *input);

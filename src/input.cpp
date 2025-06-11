@@ -2,6 +2,14 @@
 
 void processKeyDown(SDL_KeyboardEvent event, GameInput *input) {
     if (event.repeat == 0) {
+        if (event.scancode == SDL_SCANCODE_F5) {
+            input->forceReload = true;
+        }
+
+        if (event.scancode == SDL_SCANCODE_F6) {
+            input->forceRestart = true;
+        }
+
         if (event.scancode == SDL_SCANCODE_UP) {
             input->moveUp = true;
         }
@@ -22,6 +30,14 @@ void processKeyDown(SDL_KeyboardEvent event, GameInput *input) {
 
 void processKeyUp(SDL_KeyboardEvent event, GameInput *input) {
     if (event.repeat == 0) {
+        if (event.scancode == SDL_SCANCODE_F5) {
+            input->forceReload = false;
+        }
+
+        if (event.scancode == SDL_SCANCODE_F6) {
+            input->forceRestart = false;
+        }
+
         if (event.scancode == SDL_SCANCODE_UP) {
             input->moveUp = false;
         }
