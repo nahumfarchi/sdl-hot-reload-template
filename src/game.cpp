@@ -1,4 +1,5 @@
-
+#include <SDL.h>
+#include <SDL_image.h>
 #include "game.h"
 
 GameMemory *g_memory;

@@ -52,6 +52,8 @@ int CALLBACK WinMain(HINSTANCE instance, HINSTANCE previousInstance, LPSTR comma
 
         mainLoopStep(api, renderer, &input);
 
+        // Hot-reload the game DLL if there's a newer version or if one of
+        // the reload shortcut were pressed.
         FILETIME lastWriteTime = win32GetLastWriteTime(GAME_DLL);
         bool reload = CompareFileTime(&lastWriteTime, &api.lastWriteTime) || input.forceReload || input.forceRestart;
         if (reload) {

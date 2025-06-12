@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SDL.h>
+union SDL_Event;
 
 struct GameInput {
     bool quit;

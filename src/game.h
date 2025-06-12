@@ -1,8 +1,9 @@
 #pragma once
 
-#include <SDL.h>
-#include <SDL_image.h>
 #include "input.h"
+
+struct SDL_Renderer;
+struct SDL_Texture;
 
 struct Entity {
     float x;
@@ -46,7 +47,3 @@ typedef GET_GAME_MEMORY_API(get_game_memory_callback);
 
 #define GET_GAME_MEMORY_SIZE_API(name) int name()
 typedef GET_GAME_MEMORY_SIZE_API(get_game_memory_size_callback);
-
-void processEvent(SDL_Event event, GameInput *input);
-void processKeyDown(SDL_KeyboardEvent event, GameInput *input);
-void processKeyUp(SDL_KeyboardEvent event, GameInput *input);

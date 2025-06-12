@@ -1,9 +1,12 @@
 #pragma once
 
-#include <SDL.h>
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <string>
 #include "game.h"
+
+struct SDL_Renderer;
+struct SDL_SharedObject;
 
 struct GameAPI {
     std::string name;

@@ -1,3 +1,4 @@
+#include <SDL.h>
 #include "input.h"
 
 void processKeyDown(SDL_KeyboardEvent event, GameInput *input) {

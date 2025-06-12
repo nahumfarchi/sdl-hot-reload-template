@@ -1,3 +1,4 @@
+#include <SDL.h>
 #include "platform_layer.h"
 
 inline FILETIME win32GetLastWriteTime(char* filename) {
