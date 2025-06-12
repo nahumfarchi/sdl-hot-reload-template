@@ -144,7 +144,7 @@ int CALLBACK WinMain(HINSTANCE instance, HINSTANCE previousInstance, LPSTR comma
         return 1;
     }
 
-    api.initGame();
+    api.initGame(renderer);
     GameInput input = {};
     while (api.isGameRunning()) {
         assert(api.isValid)
@@ -167,7 +167,7 @@ int CALLBACK WinMain(HINSTANCE instance, HINSTANCE previousInstance, LPSTR comma
                 if (forceRestart) {
                     // Re-initialize the game and all of it's internal state
                     api.releaseGame();
-                    newAPI.initGame();
+                    newAPI.initGame(renderer);
                 } else {
                     // Hot-reload using the current game memory
                     GameMemory *memory = api.getGameMemory();

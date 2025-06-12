@@ -8,6 +8,7 @@ call scripts\build_hot_reload_definitions
 set OUT_DIR=build\hot_reload
 if not exist %OUT_DIR% mkdir %OUT_DIR%
 if not exist %OUT_DIR%\SDL3.dll xcopy ext\SDL3.dll %OUT_DIR%
+if not exist %OUT_DIR%\SDL3_image.dll xcopy %sdl_image_path%\SDL3_image.dll %OUT_DIR%
 
 ::odin build source\main_release -out:%OUT_DIR%\game_debug.exe -strict-style -vet -debug
 ::IF %ERRORLEVEL% NEQ 0 exit /b 1
@@ -25,7 +26,7 @@ set dll_entry_point=%code_path%\game.cpp
 
 :: Build the game dll
 del *.pdb > NUL 2> NUL
-cl %sdl_include% %optimization% %flags% %defines% %debug% -Fmgame.map %dll_entry_point% %game_dll_libs% -LD /link /LIBPATH:%sdl_path% /pdb:game%random%.pdb %common_link% %dll_link%
+cl %sdl_includes% %optimization% %flags% %defines% %debug% -Fmgame.map %dll_entry_point% %game_dll_libs% -LD /link %add_sdl_libs% /pdb:game%random%.pdb %common_link% %dll_link%
 
 echo Hot-reload build created in %OUT_DIR%
 

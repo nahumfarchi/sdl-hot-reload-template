@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL.h>
+#include <SDL_image.h>
 #include "input.h"
 
 struct Entity {
@@ -8,6 +9,7 @@ struct Entity {
     float y;
     float width;
     float height;
+    SDL_Texture *texture;
 };
 
 struct GameMemory {
@@ -24,7 +26,7 @@ struct GameMemory {
 
 // "Services" that the game provides to the platform layer
 
-#define INIT_GAME_API(name) void name()
+#define INIT_GAME_API(name) void name(SDL_Renderer *renderer)
 typedef INIT_GAME_API(init_game_callback);
 
 #define HOT_RELOAD_API(name) void name(GameMemory *memory)

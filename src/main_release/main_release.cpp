@@ -24,7 +24,7 @@ int CALLBACK WinMain(HINSTANCE instance, HINSTANCE previousInstance, LPSTR comma
         exit(1);
     }
     
-    initGame();
+    initGame(renderer);
     GameInput input = {};
     while (isGameRunning()) {
         SDL_Event event;

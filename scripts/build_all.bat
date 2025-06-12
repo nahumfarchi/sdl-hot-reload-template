@@ -1,0 +1,2 @@
+call debug_build
+call hot_reload_build

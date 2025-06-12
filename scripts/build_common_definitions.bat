@@ -6,8 +6,11 @@ IF %ERRORLEVEL% NEQ 0 call shell
 :: Compile target path
 set code_path=..\..\src
 set lib_folder_path=C:\lib
+set sdl_includes=/I%lib_folder_path%\sdl\include /I%lib_folder_path%\sdl\include\SDL3 /I%lib_folder_path%\SDL_image\include\SDL3_image
+
 set sdl_path=%lib_folder_path%\sdl\VisualC\x64\Debug
-set sdl_include=/I%lib_folder_path%\sdl\include /I%lib_folder_path%\sdl\include\SDL3
+set sdl_image_path=%lib_folder_path%\SDL_image\VisualC\x64\Debug
+set add_sdl_libs=/LIBPATH:%sdl_path% /LIBPATH:%sdl_image_path%
 
 :: General compiler flags
 set flags=                         -nologo                   &:: Suppress Startup Banner

@@ -15,6 +15,10 @@ INIT_GAME_API(initGame) {
     player->height = 50;
 
     g_memory->isRunning = true;
+
+    SDL_Surface* bmp = SDL_LoadBMP("assets/lettuce.bmp");
+    g_memory->player.texture = SDL_CreateTextureFromSurface(renderer, bmp);
+    SDL_DestroySurface(bmp);
 }
 
 EXTERN_C
@@ -52,14 +56,13 @@ UPDATE_GAME_API(updateGame) {
     SDL_FRect playerRect = { player->x, player->y, player->width, player->height };
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
-    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-    //SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
-    SDL_RenderRect(renderer, &playerRect);
+    SDL_RenderTexture(renderer, player->texture, nullptr, &playerRect);
     SDL_RenderPresent(renderer);
 }
 
 EXTERN_C
 RELEASE_GAME_API(releaseGame) {
+    SDL_DestroyTexture(g_memory->player.texture);
     delete g_memory;
 }
 

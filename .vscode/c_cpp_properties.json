@@ -4,8 +4,9 @@
       "name": "Win32",
       "includePath": [
         "${workspaceFolder}/**",
-        "ext\\sdl\\include",
-        "ext\\sdl\\include\\SDL3"
+        "C:\\lib\\sdl\\include",
+        "C:\\lib\\sdl\\include\\SDL3",
+        "C:\\lib\\SDL_image\\include\\SDL3_image"
       ],
       "defines": ["_DEBUG", "UNICODE", "_UNICODE"],
       "windowsSdkVersion": "10.0.22000.0",
