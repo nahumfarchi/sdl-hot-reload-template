@@ -18,7 +18,7 @@ pushd %OUT_DIR%
 :: Note: you can use http://dependencywalker.com/ to check what your exe relies on
 
 :: Compile target path
-set cpp_files=%code_path%\main_hot_reload\main_hot_reload.cpp %code_path%\input.cpp
+set cpp_files=%code_path%\main_hot_reload\main_hot_reload.cpp %code_path%\input.cpp %code_path%\platform_layer.cpp
 set dll_entry_point=%code_path%\game.cpp
 
 :: timecmd cl /Zi ..\src\win32_handmade.cpp user32.lib

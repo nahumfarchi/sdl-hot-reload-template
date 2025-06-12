@@ -22,7 +22,7 @@ pushd %OUT_DIR%
 
 :: Compile target path
 set code_path=..\..\src
-set cpp_files=%code_path%\main_release\main_release.cpp %code_path%\input.cpp
+set cpp_files=%code_path%\main_release\main_release.cpp %code_path%\input.cpp %code_path%\platform_layer.cpp
 
 :: Build
 Echo Building...

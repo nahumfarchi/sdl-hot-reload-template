@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include <windows.h>
 
+#include "../platform_layer.h"
 #include "../game.cpp"
 
 const int INITIAL_WIDTH = 640;
@@ -23,16 +24,21 @@ int CALLBACK WinMain(HINSTANCE instance, HINSTANCE previousInstance, LPSTR comma
         // TODO: handle error
         exit(1);
     }
+
+    GameAPI api = {};
+    api.name = "release";
+    api.isValid = true;
+    api.initGame = &initGame;
+    api.isGameRunning = &isGameRunning;
+    api.updateGame = &updateGame;
+    api.releaseGame = &releaseGame;
+    api.getGameMemory = &getGameMemory;
+    api.getGameMemorySize = &getGameMemorySize;
     
     initGame(renderer);
     GameInput input = {};
     while (isGameRunning()) {
-        SDL_Event event;
-        while (SDL_PollEvent(&event)) {
-            processEvent(event, &input);
-        }
-
-        updateGame(renderer, input);
+        mainLoopStep(api, renderer, &input);
     }
 
     releaseGame();

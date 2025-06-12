@@ -35,7 +35,7 @@ typedef HOT_RELOAD_API(hot_reload_game_callback);
 #define IS_GAME_RUNNING_API(name) bool name()
 typedef IS_GAME_RUNNING_API(is_game_running_callback);
 
-#define UPDATE_GAME_API(name) void name(SDL_Renderer *renderer, GameInput input)
+#define UPDATE_GAME_API(name) void name(SDL_Renderer *renderer, GameInput input, double dt)
 typedef UPDATE_GAME_API(update_game_callback);
 
 #define RELEASE_GAME_API(name) void name()

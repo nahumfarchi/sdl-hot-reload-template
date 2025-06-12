@@ -39,7 +39,7 @@ UPDATE_GAME_API(updateGame) {
     }
     
     Entity *player = &g_memory->player;
-    float speed = 0.1f;
+    float speed = 0.1f * (float)dt;
     if (input.moveUp) {
         player->y -= speed;
     }

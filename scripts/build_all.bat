@@ -1,2 +1,2 @@
-call debug_build
-call hot_reload_build
+call timecmd debug_build
+call timecmd hot_reload_build

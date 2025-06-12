@@ -1,1 +1,1 @@
-hot_reload_build.bat
+timecmd hot_reload_build.bat
