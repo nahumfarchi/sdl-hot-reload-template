@@ -62,7 +62,6 @@ void processEvent(SDL_Event event, GameInput *input) {
     SDL_Renderer *_renderer = SDL_GetRenderer(_window);
 
     switch (event.type) {
-
         case SDL_EVENT_QUIT: {
             input->quit = true;
             break;

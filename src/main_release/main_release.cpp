@@ -1,5 +1,4 @@
 #include <SDL.h>
-#include <windows.h>
 
 #include "../platform_layer.h"
 #include "../game.cpp"
@@ -13,7 +12,8 @@ int CALLBACK WinMain(HINSTANCE instance, HINSTANCE previousInstance, LPSTR comma
         exit(1);
     }
 
-    SDL_Window *window = SDL_CreateWindow("SDL hot-reload template", INITIAL_WIDTH, INITIAL_HEIGHT, SDL_WINDOW_RESIZABLE);
+    SDL_Window *window =
+        SDL_CreateWindow("SDL hot-reload template", INITIAL_WIDTH, INITIAL_HEIGHT, SDL_WINDOW_RESIZABLE);
     if (!window) {
         // TODO: handle error
         exit(1);
@@ -34,7 +34,7 @@ int CALLBACK WinMain(HINSTANCE instance, HINSTANCE previousInstance, LPSTR comma
     api.releaseGame = &releaseGame;
     api.getGameMemory = &getGameMemory;
     api.getGameMemorySize = &getGameMemorySize;
-    
+
     initGame(renderer);
     GameInput input = {};
     while (isGameRunning()) {

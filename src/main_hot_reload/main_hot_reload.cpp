@@ -1,17 +1,15 @@
 #include <SDL.h>
-#include <windows.h>
-#include <string>
 #include <stdio.h>
 #include "../platform_layer.h"
 #include "../game.h"
 
-char* GAME_DLL = "game.dll";
+char *GAME_DLL = "game.dll";
 
 #if DEBUG
 #define assert(expression) \
-  if (!(expression)) {     \
-    *(int*)0 = 0;          \
-  }
+    if (!(expression)) {   \
+        *(int *)0 = 0;     \
+    }
 #else
 #define assert(expression)
 #endif
@@ -25,7 +23,8 @@ int CALLBACK WinMain(HINSTANCE instance, HINSTANCE previousInstance, LPSTR comma
         exit(1);
     }
 
-    SDL_Window *window = SDL_CreateWindow("SDL hot-reload template", INITIAL_WIDTH, INITIAL_HEIGHT, SDL_WINDOW_RESIZABLE);
+    SDL_Window *window =
+        SDL_CreateWindow("SDL hot-reload template", INITIAL_WIDTH, INITIAL_HEIGHT, SDL_WINDOW_RESIZABLE);
     if (!window) {
         // TODO: handle error
         exit(1);
@@ -36,11 +35,10 @@ int CALLBACK WinMain(HINSTANCE instance, HINSTANCE previousInstance, LPSTR comma
         // TODO: handle error
         exit(1);
     }
-    
+
     printf("Loading game API...\n");
     GameAPI api = loadGameAPI(GAME_DLL, 0);
     if (!api.isValid) {
-        //std::cout << "Failed to load game API at startup" << std::endl;
         printf("Failed to tload game API at startup!\n");
         return 1;
     }
@@ -58,7 +56,7 @@ int CALLBACK WinMain(HINSTANCE instance, HINSTANCE previousInstance, LPSTR comma
         bool reload = CompareFileTime(&lastWriteTime, &api.lastWriteTime) || input.forceReload || input.forceRestart;
         if (reload) {
             printf("Hot-reloading version %d\n", api.version + 1);
-            GameAPI newAPI = loadGameAPI(GAME_DLL, api.version+1);
+            GameAPI newAPI = loadGameAPI(GAME_DLL, api.version + 1);
             if (newAPI.isValid) {
                 bool memorySizeChanged = api.getGameMemorySize() != newAPI.getGameMemorySize();
                 bool forceRestart = input.forceRestart || memorySizeChanged;

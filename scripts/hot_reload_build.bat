@@ -23,12 +23,28 @@ set dll_entry_point=%code_path%\game.cpp
 
 :: timecmd cl /Zi ..\src\win32_handmade.cpp user32.lib
 del *.pdb > NUL 2> NUL
+
 :: TODO - separate the hot-reload build and the platform build
 :: Build the game dll
-cl %sdl_includes% %optimization% %flags% %defines% %debug% -Fmgame.map %dll_entry_point% %game_dll_libs% -LD /link %add_sdl_libs% /pdb:game%random%.pdb %common_link% %dll_link%
+echo.
+echo =======================================================================================
+echo Building game DLL...
+cl^
+    %sdl_includes% %optimization% %flags% %defines% %debug% -Fmgame.map^
+    %dll_entry_point%^
+    %game_dll_libs% -LD^
+    /link %add_sdl_libs% /pdb:game%random%.pdb %common_link% %dll_link%
+echo Done.
+echo.
+
 :: Build the platform layer
 :: TODO: -Fmwin32_handmade.map?
-cl %sdl_includes% %optimization% %flags% %defines% %debug% -Fmmain_hot_reload.map %cpp_files% %win32_libs% /link %add_sdl_libs% %common_link% %win32_link%
+echo Building platform layer...
+cl^
+    %sdl_includes% %optimization% %flags% %defines% %debug% -Fmmain_hot_reload.map^
+    %cpp_files% %win32_libs% /link %add_sdl_libs% %common_link% %win32_link% 
+echo Done.
+echo.
 
 echo Hot-reload build created in %OUT_DIR%
 

@@ -1,16 +1,16 @@
 #include <SDL.h>
 #include "platform_layer.h"
 
-inline FILETIME win32GetLastWriteTime(char* filename) {
+inline FILETIME win32GetLastWriteTime(char *filename) {
     FILETIME lastWriteTime = {};
-  
+
     WIN32_FIND_DATAA findData;
     HANDLE findHandle = FindFirstFileA(filename, &findData);
     if (findHandle != INVALID_HANDLE_VALUE) {
-      lastWriteTime = findData.ftLastWriteTime;
-      FindClose(findHandle);
+        lastWriteTime = findData.ftLastWriteTime;
+        FindClose(findHandle);
     }
-  
+
     return lastWriteTime;
 }
 
@@ -19,7 +19,7 @@ GameAPI loadGameAPI(const char *dllPath, int version) {
     api.isValid = false;
     api.version = version;
 
-    api.lastWriteTime = win32GetLastWriteTime((char*)dllPath);
+    api.lastWriteTime = win32GetLastWriteTime((char *)dllPath);
 
     // Create a copy of the dll so that it doesn't become locked
     std::string dllSrc = std::string("game.dll");
@@ -35,37 +35,37 @@ GameAPI loadGameAPI(const char *dllPath, int version) {
         return api;
     }
 
-    api.initGame = (init_game_callback*)SDL_LoadFunction(gameDLL, "initGame");
+    api.initGame = (init_game_callback *)SDL_LoadFunction(gameDLL, "initGame");
     if (!api.initGame) {
         return api;
     }
 
-    api.isGameRunning = (is_game_running_callback*)SDL_LoadFunction(gameDLL, "isGameRunning");
+    api.isGameRunning = (is_game_running_callback *)SDL_LoadFunction(gameDLL, "isGameRunning");
     if (!api.isGameRunning) {
         return api;
     }
 
-    api.updateGame = (update_game_callback*)SDL_LoadFunction(gameDLL, "updateGame");
+    api.updateGame = (update_game_callback *)SDL_LoadFunction(gameDLL, "updateGame");
     if (!api.updateGame) {
         return api;
     }
 
-    api.releaseGame = (release_game_callback*)SDL_LoadFunction(gameDLL, "releaseGame");
+    api.releaseGame = (release_game_callback *)SDL_LoadFunction(gameDLL, "releaseGame");
     if (!api.releaseGame) {
         return api;
     }
 
-    api.hotReloadGame = (hot_reload_game_callback*)SDL_LoadFunction(gameDLL, "hotReloadGame");
+    api.hotReloadGame = (hot_reload_game_callback *)SDL_LoadFunction(gameDLL, "hotReloadGame");
     if (!api.hotReloadGame) {
         return api;
     }
 
-    api.getGameMemory = (get_game_memory_callback*)SDL_LoadFunction(gameDLL, "getGameMemory");
+    api.getGameMemory = (get_game_memory_callback *)SDL_LoadFunction(gameDLL, "getGameMemory");
     if (!api.getGameMemory) {
         return api;
     }
 
-    api.getGameMemorySize = (get_game_memory_size_callback*)SDL_LoadFunction(gameDLL, "getGameMemorySize");
+    api.getGameMemorySize = (get_game_memory_size_callback *)SDL_LoadFunction(gameDLL, "getGameMemorySize");
     if (!api.getGameMemorySize) {
         return api;
     }
@@ -79,7 +79,7 @@ void unloadGameAPI(GameAPI *api) {
         SDL_UnloadObject(api->dll);
         api->dll = nullptr;
     }
-    
+
     api->isValid = false;
 }
 

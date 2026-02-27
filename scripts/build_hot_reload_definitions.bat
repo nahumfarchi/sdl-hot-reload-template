@@ -10,3 +10,4 @@ set dll_link=%dll_link%            /EXPORT:getGameMemorySize
 :: Game DLL required libraries
 set game_dll_libs=                 shell32.lib
 set game_dll_libs=%game_dll_libs%  SDL3.lib
+set game_dll_libs=%game_dll_libs%  SDL3_image.lib

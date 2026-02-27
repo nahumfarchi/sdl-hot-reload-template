@@ -4,19 +4,7 @@
 
 struct SDL_Renderer;
 struct SDL_Texture;
-
-struct Entity {
-    float x;
-    float y;
-    float width;
-    float height;
-    SDL_Texture *texture;
-};
-
-struct GameMemory {
-    bool isRunning;
-    Entity player;
-};
+struct GameMemory;
 
 #ifdef __cplusplus
 // Disable the C++ compiler name-mangling
@@ -42,7 +30,7 @@ typedef UPDATE_GAME_API(update_game_callback);
 #define RELEASE_GAME_API(name) void name()
 typedef RELEASE_GAME_API(release_game_callback);
 
-#define GET_GAME_MEMORY_API(name) GameMemory* name()
+#define GET_GAME_MEMORY_API(name) GameMemory *name()
 typedef GET_GAME_MEMORY_API(get_game_memory_callback);
 
 #define GET_GAME_MEMORY_SIZE_API(name) int name()

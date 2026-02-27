@@ -2,6 +2,7 @@
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+// TODO: remove the string dependency
 #include <string>
 #include "game.h"
 
@@ -30,4 +31,4 @@ void unloadGameAPI(GameAPI *api);
 
 void mainLoopStep(GameAPI api, SDL_Renderer *renderer, GameInput *input);
 
-inline FILETIME win32GetLastWriteTime(char* filename);
+inline FILETIME win32GetLastWriteTime(char *filename);
